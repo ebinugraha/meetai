@@ -82,6 +82,26 @@ export const SignUpViews = () => {
     );
   };
 
+  const onSocial = (provider: "github" | "google") => {
+    setError(null);
+    setLoading(true);
+    authClient.signIn.social(
+      {
+        provider,
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          router.push("/");
+        },
+        onError: ({ error }) => {
+          setLoading(false);
+          setError(error.message);
+        },
+      }
+    );
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
@@ -171,7 +191,11 @@ export const SignUpViews = () => {
                 )}
 
                 <Button type="submit" disabled={isLoading}>
-                  {isLoading ? <Loader2 className="animate-spin" /> : "Register"}
+                  {isLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Register"
+                  )}
                 </Button>
 
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -180,10 +204,20 @@ export const SignUpViews = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button className="w-full" variant={"outline"} type="button">
+                  <Button
+                    onClick={() => onSocial("google")}
+                    className="w-full"
+                    variant={"outline"}
+                    type="button"
+                  >
                     Google
                   </Button>
-                  <Button className="w-full" variant={"outline"} type="button">
+                  <Button
+                    onClick={() => onSocial("github")}
+                    className="w-full"
+                    variant={"outline"}
+                    type="button"
+                  >
                     Github
                   </Button>
                 </div>

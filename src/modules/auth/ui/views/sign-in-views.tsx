@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Loader2, TriangleAlert } from "lucide-react";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -54,6 +55,26 @@ export const SignInViews = () => {
       {
         email: data.email,
         password: data.password,
+      },
+      {
+        onSuccess: () => {
+          setLoading(false);
+          router.push("/");
+        },
+        onError: ({ error }) => {
+          setLoading(false);
+          setError(error.message);
+        },
+      }
+    );
+  };
+
+  const onSocial = (provider: "github" | "google") => {
+    setError(null);
+    setLoading(true);
+    authClient.signIn.social(
+      {
+        provider,
       },
       {
         onSuccess: () => {
@@ -134,11 +155,21 @@ export const SignInViews = () => {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
-                  <Button className="w-full" variant={"outline"} type="button">
-                    Google
+                  <Button
+                    onClick={() => onSocial("google")}
+                    className="w-full"
+                    variant={"outline"}
+                    type="button"
+                  >
+                    <FaGoogle /> Google
                   </Button>
-                  <Button className="w-full" variant={"outline"} type="button">
-                    Github
+                  <Button
+                    onClick={() => onSocial("github")}
+                    className="w-full"
+                    variant={"outline"}
+                    type="button"
+                  >
+                    <FaGithub /> Github
                   </Button>
                 </div>
                 <span className="text-sm text-center">

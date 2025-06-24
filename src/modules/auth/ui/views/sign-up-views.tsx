@@ -233,7 +233,7 @@ export const SignUpViews = () => {
               </form>
             </Form>
           </div>
-          <div className="bg-radial from-fuchsia-700 to-fuchsia-900 relative hidden md:flex flex-col gap-y-4 items-center justify-center">
+          <div className="bg-gradient-to-r from-[#a938c7] to-[#371644] relative hidden md:flex flex-col gap-y-4 items-center justify-center">
             <img src="/logo.svg" alt="logo" className="w-[96px] h-[96px]" />
             <h1 className="text-white text-2xl font-semibold">Meet.Ai</h1>
           </div>

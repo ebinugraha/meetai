@@ -39,7 +39,7 @@ export const firstSection = [
   {
     icon: BotIcon,
     label: "Agents",
-    href: "/agent",
+    href: "/agents",
   },
 ];
 

@@ -14,19 +14,29 @@ import {
   MAX_PAGE_SIZE,
   MIN_PAGE_SIZE,
 } from "@/constant";
-import { sleep } from "@trpc/server/unstable-core-do-not-import";
+import { sleep, TRPCError } from "@trpc/server/unstable-core-do-not-import";
 
 export const agentsRouter = createTRPCRouter({
   getOne: protectedBaseProcedure
     .input(z.object({ id: z.string() }))
-    .query(async ({ input }) => {
+    .query(async ({ input, ctx }) => {
       const [data] = await db
         .select({
           ...getTableColumns(agents),
           meetingCount: sql<number>`2`,
         })
         .from(agents)
-        .where(eq(agents.id, input.id));
+        .where(
+          and(eq(agents.id, input.id), eq(agents.userId, ctx.auth.user.id))
+        );
+
+      if (!data) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Agents not found",
+        });
+      }
+
       return data;
     }),
   // next change to protectedBaseProcedure

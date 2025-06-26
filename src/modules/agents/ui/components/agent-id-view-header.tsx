@@ -88,11 +88,11 @@ export const AgentIdViewHeader = ({
         </DropdownMenu>
       ) : (
         <div className="flex gap-x-2">
-          <Button variant={"outline"} size={"sm"}>
+          <Button variant={"outline"} size={"sm"} onClick={onEdit}>
             <PencilIcon className="text-yellow-400" />
             <span className="text-xs">Edit</span>
           </Button>
-          <Button variant={"outline"} size={"sm"}>
+          <Button variant={"outline"} size={"sm"} onClick={onRemove}>
             <Trash2 className="text-destructive" />
             <span className="text-xs">Remove</span>
           </Button>

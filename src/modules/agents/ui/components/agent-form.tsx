@@ -48,8 +48,27 @@ export const AgentForm = ({
       },
       onSuccess: async () => {
         // prefetch data di page
-        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
+        await queryClient.invalidateQueries(
+          trpc.agents.getMany.queryOptions({})
+        );
+        onSuccess?.();
+      },
+    })
+  );
+
+  const updateAgents = useMutation(
+    trpc.agents.update.mutationOptions({
+      onError: (error) => {
+        toast.error(error.message);
+        // TODO: if error is FOBIDDEN redirect to /upgrade
+      },
+      onSuccess: async () => {
+        // prefetch data di page
+        await queryClient.invalidateQueries(
+          trpc.agents.getMany.queryOptions({})
+        );
         if (initialsValues?.id) {
+          // prefetch data one di page id agents
           await queryClient.invalidateQueries(
             trpc.agents.getOne.queryOptions({
               id: initialsValues.id,
@@ -70,13 +89,16 @@ export const AgentForm = ({
   });
 
   const isEdit = !!initialsValues;
-  const isPending = createAgents.isPending;
+  const isPending = createAgents.isPending || updateAgents.isPending;
 
   const onSubmit = (values: z.infer<typeof agentsSchema>) => {
     if (isEdit) {
-      console.log("TODO: create a update agents");
+      updateAgents.mutate({
+        id: initialsValues.id,
+        ...values,
+      });
     } else {
-      createAgents.mutate(values)
+      createAgents.mutate(values);
     }
   };
 

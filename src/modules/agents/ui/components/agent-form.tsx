@@ -48,7 +48,7 @@ export const AgentForm = ({
       },
       onSuccess: async () => {
         // prefetch data di page
-        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions());
+        await queryClient.invalidateQueries(trpc.agents.getMany.queryOptions({}));
         if (initialsValues?.id) {
           await queryClient.invalidateQueries(
             trpc.agents.getOne.queryOptions({

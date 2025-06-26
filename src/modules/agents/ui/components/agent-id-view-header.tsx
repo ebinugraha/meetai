@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -16,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import {
   ChevronRightIcon,
@@ -40,6 +43,8 @@ export const AgentIdViewHeader = ({
   onEdit,
   onRemove,
 }: Props) => {
+  const isMobile = useIsMobile();
+
   return (
     <div className="flex items-center justify-between">
       <Breadcrumb>
@@ -62,23 +67,37 @@ export const AgentIdViewHeader = ({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button variant={"outline"}>
-            Options <MoreVerticalIcon />
+      {isMobile ? (
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <Button variant={"outline"} size={"sm"}>
+              <span className="text-xs">Options</span>
+              <MoreVerticalIcon />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={onEdit}>
+              <PencilIcon className="size-4 text-yellow-400" />
+              Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onRemove}>
+              <Trash2 className="size-4 text-red-400" />
+              Remove
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <div className="flex gap-x-2">
+          <Button variant={"outline"} size={"sm"}>
+            <PencilIcon className="text-yellow-400" />
+            <span className="text-xs">Edit</span>
           </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={onEdit}>
-            <PencilIcon className="size-4 text-yellow-400" />
-            Edit
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={onRemove}>
-            <Trash2 className="size-4 text-red-400" />
-            Remove
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <Button variant={"outline"} size={"sm"}>
+            <Trash2 className="text-destructive" />
+            <span className="text-xs">Remove</span>
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

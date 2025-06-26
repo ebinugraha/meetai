@@ -27,9 +27,9 @@ export const ListHeader = () => {
       <div className="py-4 px-4 md:px-8 flex flex-col gap-y-4">
         <div className="flex items-center justify-between">
           <h5 className="font-medium text-xl">My Agents</h5>
-          <Button onClick={() => setIsDialogOpen((open) => !open)}>
-            <PlusIcon />
-            New Agent
+          <Button onClick={() => setIsDialogOpen((open) => !open)} size={"sm"}>
+            <PlusIcon className="size-3" />
+            <span className="text-xs">New Agent</span>
           </Button>
         </div>
         <div className="flex items-center gap-x-2">

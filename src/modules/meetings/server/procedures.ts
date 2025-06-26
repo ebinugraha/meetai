@@ -10,8 +10,28 @@ import {
   MIN_PAGE_SIZE,
 } from "@/constant";
 import { sleep, TRPCError } from "@trpc/server/unstable-core-do-not-import";
+import { meetingsSchema, updateMeetingsSchema } from "../schemas";
 
 export const meetingsRouter = createTRPCRouter({
+  update: protectedBaseProcedure
+      .input(updateMeetingsSchema)
+      .mutation(async ({ input, ctx }) => {
+        const [dataUpdate] = await db
+          .update(meetings)
+          .set(input)
+          .where(
+            and(eq(meetings.id, input.id), eq(meetings.userId, ctx.auth.user.id))
+          )
+          .returning();
+  
+        if (!dataUpdate) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Agents not found",
+          });
+        }
+        return dataUpdate;
+      }),
   getOne: protectedBaseProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
@@ -93,5 +113,16 @@ export const meetingsRouter = createTRPCRouter({
         total: total.count,
         totalPages,
       };
+    }),
+
+  create: protectedBaseProcedure
+    .input(meetingsSchema)
+    .mutation(async ({ input, ctx }) => {
+      const [createdMeeting] = await db
+        .insert(meetings)
+        .values({ ...input, userId: ctx.auth.user.id })
+        .returning();
+
+      return createdMeeting;
     }),
 });

@@ -7,9 +7,9 @@ import { columns } from "../components/columns";
 import { EmptyState } from "@/components/empty-state";
 import { useAgentsFilters } from "../../hooks/use-agents-filters";
 import { Skeleton } from "@/components/ui/skeleton";
-import { AgentsDataPagination } from "../components/agents-data-pagination";
 import { useRouter } from "next/navigation";
 import { DataTable } from "@/components/data-table";
+import { DataPagination } from "@/components/data-pagination";
 
 export const AgentsViews = () => {
   const router = useRouter();
@@ -30,7 +30,7 @@ export const AgentsViews = () => {
         columns={columns}
         onRowClick={(row) => router.push(`/agents/${row.id}`)}
       />
-      <AgentsDataPagination
+      <DataPagination
         onPageChange={(page) => setFilters({ page })}
         totalPage={data.totalPages}
         page={filters.page}

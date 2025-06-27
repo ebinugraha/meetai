@@ -6,7 +6,7 @@ interface AgentsDataPaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export const AgentsDataPagination = ({
+export const DataPagination = ({
   page,
   totalPage,
   onPageChange,

@@ -12,14 +12,17 @@ import { toast } from "sonner";
 import { useConfirm } from "@/hooks/use-confirm";
 import { useState } from "react";
 import { UpdateMeetingDialog } from "../components/agent-update-dialog";
+import { UpcommingState } from "@/modules/meetings/ui/components/upcomming-state";
+import { ActiveState } from "../components/active-state";
+import { CancelledState } from "../components/cancelled-state";
+import { ProcessingState } from "../components/processing-state";
 
 interface Props {
   meetingsId: string;
 }
 
 export const MeetingIdViews = ({ meetingsId }: Props) => {
-
-  console.log(meetingsId)
+  console.log(meetingsId);
 
   const router = useRouter();
   const trpc = useTRPC();
@@ -60,6 +63,12 @@ export const MeetingIdViews = ({ meetingsId }: Props) => {
     await remove.mutateAsync({ id: data.id });
   };
 
+  const isActive = data.status == "active";
+  const isUpcoming = data.status == "upcoming";
+  const isCompleted = data.status == "completed";
+  const isProcessing = data.status == "processing";
+  const isCancelled = data.status == "cancelled";
+
   return (
     <>
       <UpdateMeetingDialog
@@ -75,9 +84,17 @@ export const MeetingIdViews = ({ meetingsId }: Props) => {
           onEdit={() => setIsOpenMeetingUpdateDialog((open) => !open)}
           onRemove={handleRemove}
         />
-        {JSON.stringify(data, null, 2)}
+        {isUpcoming && (
+          <UpcommingState
+            isCancelling={false}
+            meetingId={meetingsId}
+            onCancelMeeting={() => {}}
+          />
+        )}
+        {isActive && <ActiveState meetingId={meetingsId} />}
+        {isProcessing && <ProcessingState/>}
+        {isCancelled && <CancelledState/>}
       </div>
-      ;
     </>
   );
 };

@@ -79,7 +79,7 @@ export const agentsRouter = createTRPCRouter({
 
       return data;
     }),
-    
+
   getMany: protectedBaseProcedure
     .input(
       z.object({
@@ -134,7 +134,7 @@ export const agentsRouter = createTRPCRouter({
         totalPages,
       };
     }),
-    
+
   create: protectedBaseProcedure
     .input(agentsSchema)
     .mutation(async ({ input, ctx }) => {
